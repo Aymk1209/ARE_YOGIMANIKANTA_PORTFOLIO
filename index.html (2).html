@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Are Yogi Manikanta — Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1120;
+    --panel:#121A2E;
+    --panel-alt:#161F36;
+    --line:#232D45;
+    --text:#E7ECF6;
+    --muted:#8A96AE;
+    --amber:#F2A93B;
+    --teal:#4FD1C5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber); color:#0B1120;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--teal);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:''; width:7px; height:7px; background:var(--teal); border-radius:50%; box-shadow:0 0 8px var(--teal);}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,17,32,.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .brand{font-family:'JetBrains Mono',monospace; font-weight:500; font-size:15px;}
+  .brand span{color:var(--amber);}
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--muted);}
+  .navlinks a:hover{color:var(--text);}
+  @media(max-width:640px){.navlinks{display:none;}}
+
+  /* HERO */
+  header.hero{padding:96px 0 72px; border-bottom:1px solid var(--line); position:relative; overflow:hidden;}
+  header.hero::before{
+    content:''; position:absolute; top:-200px; right:-160px; width:520px; height:520px;
+    background:radial-gradient(circle, rgba(242,169,59,.10), transparent 70%);
+    pointer-events:none;
+  }
+  .hero-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:48px; align-items:center;}
+  @media(max-width:840px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(34px,5vw,54px); line-height:1.08; margin-bottom:18px;}
+  .hero h1 .hl{color:var(--amber);}
+  .hero p.lede{color:var(--muted); font-size:17px; max-width:52ch; margin-bottom:30px;}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono',monospace; font-size:13.5px;
+    padding:13px 22px; border-radius:6px; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--amber); color:#0B1120; font-weight:500;}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--teal); color:var(--teal); transform:translateY(-2px);}
+
+  .term{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; box-shadow:0 20px 60px -20px rgba(0,0,0,.6);
+  }
+  .term-bar{display:flex; gap:6px; padding:12px 14px; border-bottom:1px solid var(--line); background:var(--panel-alt);}
+  .term-bar span{width:10px; height:10px; border-radius:50%; background:#3a4560;}
+  .term-body{padding:20px; font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted);}
+  .term-body .l{margin-bottom:9px;}
+  .term-body .k{color:var(--teal);}
+  .term-body .v{color:var(--text);}
+  .term-body .c{color:#5a6584;}
+
+  section{padding:76px 0; border-bottom:1px solid var(--line);}
+  .sec-head{margin-bottom:40px;}
+  .sec-head h2{font-size:clamp(24px,3vw,32px);}
+
+  /* PIPELINE (signature element) */
+  .pipeline{position:relative; padding-left:2px;}
+  .pipeline::before{content:''; position:absolute; left:23px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .stage{display:grid; grid-template-columns:48px 1fr; gap:18px; padding-bottom:38px; position:relative;}
+  .stage:last-child{padding-bottom:0;}
+  .stage-num{
+    width:48px; height:48px; border-radius:50%; background:var(--panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace;
+    font-size:13px; color:var(--amber); z-index:1;
+  }
+  .stage-body h3{font-size:17px; margin-bottom:6px;}
+  .stage-body p{color:var(--muted); font-size:14.5px; max-width:64ch;}
+  .stage-tag{display:inline-block; margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal); background:rgba(79,209,197,.08); border:1px solid rgba(79,209,197,.25); padding:3px 9px; border-radius:5px;}
+
+  /* PROJECTS */
+  .proj-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+  @media(max-width:720px){.proj-grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:26px;
+    display:flex; flex-direction:column; gap:14px; transition:border-color .15s ease, transform .15s ease;
+  }
+  .card:hover{border-color:var(--amber); transform:translateY(-3px);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .card h3{font-size:17px;}
+  .card .stack{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);}
+  .card p{color:var(--muted); font-size:14px;}
+  .card-links{display:flex; gap:16px; margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:12.5px;}
+  .card-links a{color:var(--teal); border-bottom:1px solid transparent;}
+  .card-links a:hover{border-color:var(--teal);}
+  .badge{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--amber); border:1px solid rgba(242,169,59,.3); padding:2px 8px; border-radius:20px; white-space:nowrap;}
+
+  /* SKILLS */
+  .skills-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  @media(max-width:720px){.skills-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-col h4{font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); margin-bottom:14px;}
+  .skill-col ul{list-style:none;}
+  .skill-col li{color:var(--muted); font-size:14.5px; padding:6px 0; border-bottom:1px solid var(--line);}
+  .skill-col li:last-child{border-bottom:none;}
+
+  /* EDU / FOCUS */
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  @media(max-width:720px){.split{grid-template-columns:1fr;}}
+  .infoblock h4{font-size:16px; margin-bottom:8px;}
+  .infoblock p{color:var(--muted); font-size:14.5px;}
+  .infoblock .when{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--amber); margin-bottom:4px; display:block;}
+
+  footer{padding:56px 0; text-align:center;}
+  footer p{color:var(--muted); font-size:13.5px;}
+  footer .fmono{font-family:'JetBrains Mono',monospace; font-size:12px; color:#4a5674; margin-top:10px;}
+  .foot-links{display:flex; justify-content:center; gap:22px; margin-bottom:18px; font-size:14px;}
+  .foot-links a:hover{color:var(--amber);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">are_yogi<span>.dev</span></div>
+    <div class="navlinks">
+      <a href="#pipeline">Build Log</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Open to Project Coordinator &amp; Full-Stack / AI roles</div>
+      <h1>I ship full products, <span class="hl">not just code snippets.</span></h1>
+      <p class="lede">Are Yogi Manikanta — CSE (Data Science) graduate from Hyderabad who takes an idea from a static frontend to a deployed, database-backed, AI-assisted product. Six shipped builds, one continuous rebuild cycle.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">See the builds →</a>
+        <a class="btn btn-ghost" href="https://github.com/Aymk1209" target="_blank">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <div class="term-body">
+        <div class="l"><span class="c">$</span> whoami</div>
+        <div class="l"><span class="v">Are Yogi Manikanta</span></div>
+        <div class="l"><span class="k">degree</span> <span class="v">B.Tech CSE (Data Science)</span></div>
+        <div class="l"><span class="k">base</span>&nbsp; <span class="v">Hyderabad, India</span></div>
+        <div class="l"><span class="k">stack</span> <span class="v">Django · DRF · Next.js · SQL · Gemini API</span></div>
+        <div class="l"><span class="c">$</span> ./ship --status</div>
+        <div class="l"><span class="v">6 projects deployed and live ✓</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="pipeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Build Log</div>
+      <h2>How this portfolio actually happened</h2>
+    </div>
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-num">01</div>
+        <div class="stage-body">
+          <h3>Started as a static frontend</h3>
+          <p>Built the first version of "District 2nd" — a restaurant menu site — as a plain HTML/CSS frontend to nail layout and UX before touching a backend.</p>
+          <span class="stage-tag">HTML · CSS</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">02</div>
+        <div class="stage-body">
+          <h3>Rebuilt it as a real web app</h3>
+          <p>Moved to Next.js for the menu app — component structure, routing, and a UI that could actually take orders instead of just displaying them.</p>
+          <span class="stage-tag">Next.js · React</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">03</div>
+        <div class="stage-body">
+          <h3>Gave it a real backend</h3>
+          <p>Rebuilt the whole thing again — this time as a full Django (MVT + DRF) project with order tracking, so every order placed is queryable data, not just a WhatsApp message.</p>
+          <span class="stage-tag">Django · DRF · PythonAnywhere</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">04</div>
+        <div class="stage-body">
+          <h3>Layered AI on top of the workflow</h3>
+          <p>Built three separate AI-assisted operations tools — lead scoring, funnel reporting, and research grounding — each as a live, working demo, not a slide deck.</p>
+          <span class="stage-tag">Gemini API · JS</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">05</div>
+        <div class="stage-body">
+          <h3>Took a product idea to checkout</h3>
+          <p>Designed and shipped Forge3D, a small storefront for 3D-printed products with WhatsApp-based ordering — proof the full loop works end to end, not just the code.</p>
+          <span class="stage-tag">Product · E-commerce UX</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">06</div>
+        <div class="stage-body">
+          <h3>Made the data queryable in plain English</h3>
+          <p>Built an SQL AI agent dashboard that answers plain-English questions about a database's tables, records, and counts — bridging the data layer with a non-technical user.</p>
+          <span class="stage-tag">SQL · AI Agents · Vercel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Projects</div>
+      <h2>Six live builds</h2>
+    </div>
+    <div class="proj-grid">
+
+      <div class="card">
+        <div class="card-top">
+          <h3>District 2nd — Django Rebuild</h3>
+          <span class="badge">Flagship</span>
+        </div>
+        <div class="stack">Django · DRF · SQLite/Postgres · PythonAnywhere</div>
+        <p>Full restaurant menu &amp; ordering platform rebuilt from scratch in Django, with order tracking so future analytics (best-sellers by week/month) can run directly off real order data. Orders trigger a WhatsApp notification automatically.</p>
+        <div class="card-links">
+          <a href="https://yogi1209.pythonanywhere.com/" target="_blank">Live site ↗</a>
+          <a href="https://github.com/Aymk1209/district2nd-django" target="_blank">Source ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>District 2nd — Frontend &amp; App</h3>
+          <span class="badge">v1 &amp; v2</span>
+        </div>
+        <div class="stack">HTML/CSS · Next.js · React</div>
+        <p>The two earlier iterations of the same product — a static frontend, then a Next.js app — kept live as a record of the rebuild process, not thrown away.</p>
+        <div class="card-links">
+          <a href="https://aymk1209.github.io/district-2nd-frontend/" target="_blank">Frontend ↗</a>
+          <a href="https://aymk1209.github.io/district2nd-cafe/" target="_blank">Cafe site ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Forge3D Store</h3>
+          <span class="badge">Product</span>
+        </div>
+        <div class="stack">HTML/CSS/JS · WhatsApp checkout</div>
+        <p>A small e-commerce storefront for 3D-printed everyday items — soap savers, phone stands, cable clips — with a one-tap WhatsApp ordering flow in place of a full cart/checkout system.</p>
+        <div class="card-links">
+          <a href="https://aymk1209.github.io/3Dproducts/" target="_blank">Live store ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>SQL AI Agent Dashboard</h3>
+          <span class="badge">AI + Data</span>
+        </div>
+        <div class="stack">Next.js · Vercel · LLM agent</div>
+        <p>Ask plain-English questions about a database's tables, records, or counts and get an answer back — a natural-language layer over structured data.</p>
+        <div class="card-links">
+          <a href="https://district-2nd-menu.vercel.app/" target="_blank">Live demo ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>AI Ops Workflow Trio</h3>
+          <span class="badge">3-in-1</span>
+        </div>
+        <div class="stack">JS · Gemini API</div>
+        <p>Three linked live tools: a funnel-metrics parser for sales reporting, a lead-scoring &amp; CRM router for inbound intake, and a source-grounded research hub for pasted knowledge bases.</p>
+        <div class="card-links">
+          <a href="https://aymk1209.github.io/ai-reporting-workflow/" target="_blank">Reporting ↗</a>
+          <a href="https://aymk1209.github.io/ai-customer-workflow/" target="_blank">Lead router ↗</a>
+          <a href="https://aymk1209.github.io/ai-research-workflow/" target="_blank">Research hub ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Indian Sign Language Recognition</h3>
+          <span class="badge">ML / Research</span>
+        </div>
+        <div class="stack">Python · Scikit-Learn · CNN</div>
+        <p>Applied ML study on hand-gesture recognition, translating Indian Sign Language to text and voice output using a CNN-based pipeline — grounded in a full written research document.</p>
+        <div class="card-links">
+          <a href="https://github.com/Aymk1209/An-efficient-approach-for.-interpretation-of-Indian-sign-language-using-machine-learning" target="_blank">Source ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Range</div>
+      <h2>What sits behind the builds</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-col">
+        <h4>Backend &amp; Data</h4>
+        <ul>
+          <li>Python · Django · DRF</li>
+          <li>SQL &amp; relational data modeling</li>
+          <li>REST API design</li>
+          <li>Scikit-Learn</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <h4>Frontend</h4>
+        <ul>
+          <li>Next.js · React</li>
+          <li>HTML / CSS / JS</li>
+          <li>Responsive product UI</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <h4>AI &amp; Deployment</h4>
+        <ul>
+          <li>Gemini API integration</li>
+          <li>LLM-driven data agents</li>
+          <li>PythonAnywhere · Vercel · GitHub Pages</li>
+          <li>Git / GitHub workflows</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="border-bottom:none;">
+  <div class="wrap split">
+    <div class="infoblock">
+      <span class="when">Nov 2021 – 2025</span>
+      <h4>B.Tech, Computer Science &amp; Engineering (Data Science)</h4>
+      <p>CMR Technical Campus, Hyderabad. Coursework and a full sign-language ML research project sit alongside the applied product builds above.</p>
+    </div>
+    <div class="infoblock">
+      <span class="when">Now</span>
+      <h4>Open to Project Coordinator roles — and software roles as a fresher</h4>
+      <p>Comfortable owning a project end to end — scope, build, ship, iterate — as shown by rebuilding District 2nd three times as requirements changed. As a fresher, I'm just as focused on hands-on Software Developer / Full-Stack / Applied-AI roles where I can build on exactly this range of shipped work.</p>
+      <p style="margin-top:10px;">Fresher, actively building — open to entry-level Software Developer / Full-Stack roles as a first step, with these six shipped projects as proof of what I can already do on day one.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-links">
+      <a href="mailto:yogimanikantaare@gmail.com">Email</a>
+      <a href="tel:+919059260912">+91 90592 60912</a>
+      <a href="https://www.linkedin.com/in/are-yogimanikanta-633999229" target="_blank">LinkedIn</a>
+      <a href="https://github.com/Aymk1209" target="_blank">GitHub</a>
+      <a href="https://yogi1209.pythonanywhere.com/" target="_blank">Live Product</a>
+    </div>
+    <p>Are Yogi Manikanta — Hyderabad, India</p>
+    <p class="fmono">// this page is the resume — every link above is a real, deployed build</p>
+  </div>
+</footer>
+
+</body>
+</html>
